@@ -1,11 +1,5 @@
-// main/main.mbt
-
-use server // 导入 server.mbt
-use client // 导入 client.mbt
-use moonbit/os
-use moonbit/sync::WaitGroup
-
-fn init {
+// main 
+fn main {
   let addr = "127.0.0.1:8088"
   let num_clients = 3 // 在这里设置要启动的客户端数量
 

@@ -1,12 +1,7 @@
-// main/client.mbt
-
-use ssmp
-use moonbit/tcp::TcpStream
-use moonbit/io::{Reader, Writer, close}
-use moonbit/os
-use moonbit/sync::WaitGroup
-use core::result::{Result, Ok, Err}
-use core::string::String
+//use moonbit/tcp::TcpStream
+//use moonbit/io::{Reader, Writer, close}
+//use moonbit/sync::WaitGroup
+//use core::result::{Result, Ok, Err}
 
 /// 启动一个客户端实例
 pub fn start(id: Int, addr: String, wg: WaitGroup) {
