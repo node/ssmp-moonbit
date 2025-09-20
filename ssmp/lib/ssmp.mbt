@@ -1,31 +1,30 @@
-// lib/ssmp.mbt
-
-// 导入所需的基础库
 use core::result::{Result, Ok, Err}
 use core::int::U32
 use buf::{Buffer, BufferReader, BufferWriter}
 
-// 定义解析器可能遇到的错误
-pub enum ParseError {
-  Incomplete // 数据不完整
-}
-
-// 解析器的状态机
-enum State {
-  // 正在等待读取4字节的长度头部
-  ReadingLen
-  // 正在等待读取指定长度的消息体
-  ReadingBody(U32)
-}
-
-/// SSMP 协议解析器，用于处理流式数据
+/// SSMP 协议解析器，用于处理流式数据。
+///
+/// 它可以接收任意大小的数据块，并在内部缓冲，
+/// 当一个或多个完整的SSMP消息被解析出来时，将它们返回。
+///
+/// # Example
+/// ```
+/// let mut parser = ssmp::Parser::new()
+/// // 模拟接收到的网络数据
+/// let chunk1 = ssmp::serialize("hello".to_bytes()) 
+/// let chunk2 = ssmp::serialize("world".to_bytes())
+/// let messages = parser.feed(Bytes::concat(chunk1, chunk2))
+/// assert(messages.length() == 2)
+/// ```
 pub struct Parser {
-  mut buffer: Buffer // 内部缓冲区，用于存储不完整的数据
-  mut state: State   // 当前解析状态
+  mut buffer: Buffer
+  mut state: State
 }
+
+// ...（内部 `enum State` 定义保持不变）...
 
 impl Parser {
-  // 创建一个新的解析器实例
+  /// 创建一个新的、状态为空的解析器实例。
   pub fn new() -> Self {
     {
       buffer: Buffer::new(),
@@ -33,38 +32,35 @@ impl Parser {
     }
   }
 
-  /// 喂给解析器新的数据块，并尝试解析出零个或多个完整的消息。
-  /// 返回一个包含所有已解析消息的数组。
+  /// 向解析器提供新的数据块 (`data`)，并尝试解析出零个或多个完整的消息。
+  ///
+  /// ## Parameters
+  /// - `data`: 从网络流中读取到的原始字节数据。
+  ///
+  /// ## Returns
+  /// 一个包含所有已成功解析出的消息载荷（`Bytes`）的数组。
+  /// 如果没有解析出完整的消息，则返回空数组。
   pub fn feed(&mut self, data: Bytes) -> Array[Bytes] {
-    // 将新数据写入内部缓冲区
+    // ... (函数实现保持不变) ...
     self.buffer.write_bytes(data)
 
     let mut messages = Array::new()
     loop {
       match self.state {
         State::ReadingLen => {
-          // 检查缓冲区数据是否足够读取一个完整的头部（4字节）
           if self.buffer.readable_bytes() >= 4 {
-            // 读取大端序的U32作为消息体长度
             let body_len = self.buffer.read_u32_be().unwrap()
-            // 转换状态，准备读取消息体
             self.state = State::ReadingBody(body_len)
           } else {
-            // 数据不够，跳出循环，等待更多数据
             break
           }
         }
         State::ReadingBody(body_len) => {
-          // 检查缓冲区数据是否足够读取一个完整的消息体
           if self.buffer.readable_bytes() >= (body_len as Int) {
-            // 读取指定长度的消息体
             let payload = self.buffer.read_bytes(body_len as Int).unwrap()
-            // 将完整的消息添加到结果数组中
             messages.push(payload)
-            // 重置状态，准备解析下一个消息
             self.state = State::ReadingLen
           } else {
-            // 数据不够，跳出循环，等待更多数据
             break
           }
         }
@@ -74,15 +70,18 @@ impl Parser {
   }
 }
 
-/// 将载荷（Bytes）序列化为 SSMP 消息包
+/// 将载荷（`Bytes`）序列化为一个完整的 SSMP 消息包（头部 + 载荷）。
+///
+/// ## Parameters
+/// - `payload`: 需要被打包发送的原始字节数据。
+///
+/// ## Returns
+/// 一个包含了4字节大端序长度前缀和载荷的完整 SSMP 消息包。
 pub fn serialize(payload: Bytes) -> Bytes {
+  // ... (函数实现保持不变) ...
   let len = payload.length()
-  // 创建一个足够大的缓冲区来存放头部和载荷
   let mut buf = Buffer::with_capacity(4 + len)
-  // 写入大端序的长度
   buf.write_u32_be(len as U32)
-  // 写入载荷
   buf.write_bytes(payload)
-  // 返回完整的消息包
   buf.to_bytes()
 }
