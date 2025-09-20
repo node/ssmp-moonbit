@@ -27,15 +27,20 @@ SSMP implementation in MoonBit
 
 ## 📁 项目结构
 ssmp-moonbit/
-├── moon.mod              # 项目模块定义
-├── moon.pkg.json         # 项目包定义
-├── README.md             # 本文档
-├── lib/
-│   └── ssmp.mbt          # SSMP 协议库核心实现
-└── main/
+├── LICENSE             
+├── README.md             
+├── ssmp
+  ├── lib/
+  │   └── ssmp.mbt          # SSMP 协议库核心实现
+  ├── moon.mod.json         # 项目模块定义
+  ├── moon.pkg.json         # 项目包定义
+├── ssmp-example
+  └── main/
     ├── main.mbt          # 主程序入口，负责启动服务器和客户端
     ├── server.mbt        # TCP 服务器逻辑
     └── client.mbt        # TCP 客户端逻辑
+  ├── moon.mod.json  
+  ├── moon.pkg.json   
 
 ## 🚀 开始使用
 
