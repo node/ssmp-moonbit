@@ -1,0 +1,13 @@
+{
+  "name": "ssmp", 
+  "type": "library", 
+  "description": "A MoonBit implementation of the Simple Simple Messaging Protocol (SSMP) for handling length-prefixed message streams.", 
+  "keywords": [ 
+    "ssmp",
+    "protocol",
+    "tcp",
+    "network",
+    "parser"
+  ],
+  "license": "Apache-2.0" 
+}

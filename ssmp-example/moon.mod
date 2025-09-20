@@ -1,3 +1,3 @@
 [module]
-name = "ssmp-moonbit"
+name = "ssmp-example"
 version = "0.1.0"
