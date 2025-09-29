@@ -1,7 +1,7 @@
 # ssmp-moonbit
 SSMP implementation in MoonBit
 
-*WARNING:* THIS IS AN EXPERIMENTAL LIBRARY, SO DO NOT USE THIS IN YOUR PRODUCTION DIRECTLY. 
+*WARNING:* THIS IS AN EXPERIMENTAL LIBRARY, PLEASE DO NOT USE IT IN YOUR PRODUCTION DIRECTLY. 
 
 这是一个使用 [MoonBit 语言](https://www.moonbitlang.com/) 实现的 [SSMP (Simple Simple Messaging Protocol) ](https://github.com/node/ssmp) 协议库及示例程序。
 
